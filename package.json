@@ -1,19 +1,21 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
   "main": "./src/server.ts",
   "type": "commonjs",
   "scripts": {
     "dev": "ts-node ./src/server.ts"
   },
-  "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.0.0"
+    "bcrypt": "^6.0.0",
+    "express": "^5.0.0",
+    "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.0",
     "@types/node": "^22.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.0"
