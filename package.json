@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node ./dist/server.js",
-    "dev": "ts-node ./src/server.ts"
+    "dev": "ts-node ./src/server.ts",
+    "seed:admin": "ts-node ./scripts/seedAdmin.ts"
   },
   "license": "ISC",
   "dependencies": {
@@ -16,6 +17,7 @@
     "cors": "^2.8.0",
     "dotenv": "^17.0.0",
     "express": "^5.0.0",
+    "express-rate-limit": "^8.0.0",
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.0",
     "reflect-metadata": "^0.2.0",
@@ -26,6 +28,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.0",
     "@types/express": "^5.0.0",
+    "@types/express-rate-limit": "^6.0.0",
     "@types/jsonwebtoken": "^9.0.0",
     "@types/node": "^22.0.0",
     "ts-node": "^10.9.2",
