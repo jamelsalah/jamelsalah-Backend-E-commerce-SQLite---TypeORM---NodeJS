@@ -5,11 +5,14 @@
   "type": "commonjs",
   "scripts": {
     "build": "tsc",
-    "start": "node ./dist/server.js",
-    "dev": "ts-node ./src/server.ts",
-    "seed:admin": "ts-node ./scripts/seedAdmin.ts"
+    "start": "cross-env TZ=UTC node ./dist/server.js",
+    "dev": "cross-env TZ=UTC ts-node ./src/server.ts",
+    "seed:admin": "cross-env TZ=UTC ts-node ./scripts/seedAdmin.ts"
   },
   "license": "ISC",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.0",
@@ -31,6 +34,7 @@
     "@types/express-rate-limit": "^6.0.0",
     "@types/jsonwebtoken": "^9.0.0",
     "@types/node": "^22.0.0",
+    "cross-env": "^10.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.0"
   }
