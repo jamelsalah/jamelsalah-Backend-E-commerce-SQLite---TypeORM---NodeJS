@@ -4,3 +4,7 @@ database.sqlite
 .env
 *.log
 .DS_Store
+.claude/
+indextest.html
+srcutilsjobs/
+scripts/backdate-commits.sh
