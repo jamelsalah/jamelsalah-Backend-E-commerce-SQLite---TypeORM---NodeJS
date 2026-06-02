@@ -2,6 +2,8 @@
 
 API REST de e-commerce com autenticação JWT, RBAC, carrinho, pedidos e pagamento PIX via Asaas.
 
+> 📖 **Documentação interativa completa de todos os endpoints** disponível em `/docs` (Swagger UI) após rodar o projeto. Veja a seção [Documentação da API](#documentação-da-api).
+
 ## Stack
 
 - **Node.js** 22+
@@ -85,10 +87,13 @@ src/
 
 ## Documentação da API
 
-Swagger UI interativa em **`/docs`** lista todos os endpoints com:
+Após subir o projeto (`npm run dev`), a documentação interativa fica disponível em **`http://localhost:3000/docs`** (Swagger UI). Ela lista **todos os endpoints** com:
+
 - Descrição, parâmetros e schemas de request/response
-- Botão "Authorize" pra colocar o JWT obtido em `POST /auth`
-- "Try it out" para testar direto no navegador
+- Botão **"Authorize"** pra colocar o JWT obtido em `POST /auth`
+- **"Try it out"** para testar cada rota direto no navegador
+
+![Swagger UI da E-commerce API](docs/swagger-ui.png)
 
 ## Convenções de código
 
