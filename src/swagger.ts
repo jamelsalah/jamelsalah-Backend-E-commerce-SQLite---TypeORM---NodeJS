@@ -53,6 +53,22 @@ const manualSchemas = {
             },
         },
     },
+    User: {
+        type: "object",
+        properties: {
+            id: { type: "integer" },
+            name: { type: "string" },
+            email: { type: "string" },
+            role: { type: "string", enum: ["CUSTOMER", "SELLER", "ADMIN"] },
+        },
+    },
+    AuthResponse: {
+        type: "object",
+        properties: {
+            user: { $ref: "#/components/schemas/User" },
+            token: { type: "string", description: "JWT Bearer usado nas requests protegidas" },
+        },
+    },
     Category: {
         type: "object",
         properties: {

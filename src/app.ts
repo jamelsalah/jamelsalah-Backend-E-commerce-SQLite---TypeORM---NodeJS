@@ -71,6 +71,10 @@ app.use(pinoHttp({
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapiSpec));
 
+// Serve o contrato OpenAPI cru (JSON). O frontend consome isto para gerar os
+// tipos automaticamente (openapi-typescript). É só o contrato — informação pública.
+app.get("/openapi.json", (_req, res) => res.json(openapiSpec));
+
 app.use("/auth", authLimiter);
 app.use("/register", registerLimiter);
 app.use("/checkout", checkoutLimiter);
