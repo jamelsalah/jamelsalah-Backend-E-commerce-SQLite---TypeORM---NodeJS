@@ -21,6 +21,7 @@ import { CreateProductDTO, UpdateProductDTO } from "./dtos/ProductDTO";
 import { UpdateOrderStatusDTO } from "./dtos/OrderDTO";
 
 import { authMiddleware } from "./middlewares/auth";
+import { catalogLimiter } from "./middlewares/rateLimiters";
 
 import { allowRoles } from "./middlewares/roleMiddleware";
 import { UserRole } from "./types/UserRole";
@@ -53,7 +54,7 @@ router.get("/health", (_req, res) => {
  *                 type: array
  *                 items: { $ref: '#/components/schemas/Product' }
  */
-router.get("/", ProductController.home);
+router.get("/", catalogLimiter, ProductController.home);
 
 
 /**

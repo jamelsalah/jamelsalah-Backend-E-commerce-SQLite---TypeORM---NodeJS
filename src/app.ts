@@ -7,6 +7,7 @@ import { rateLimit } from "express-rate-limit";
 import pinoHttp from "pino-http";
 import swaggerUi from "swagger-ui-express";
 import router from "./routes";
+import { catalogLimiter } from "./middlewares/rateLimiters";
 import { errorHandler } from "./middlewares/errorHandler";
 import { logger } from "./utils/logger";
 import { openapiSpec } from "./swagger";
@@ -33,14 +34,6 @@ const webhookLimiter = rateLimit({
     windowMs: 60 * 1000,
     limit: 100,
     message: { error: "Rate limit excedido." },
-});
-
-// Rotas públicas de catálogo (GET /products e GET /products/:id). Limite generoso:
-// como a página é SSR, as leituras chegam pelo IP do servidor Next (um só).
-const catalogLimiter = rateLimit({
-    windowMs: 60 * 1000,
-    limit: 120,
-    message: { error: "Muitas requisições. Tente novamente em instantes." },
 });
 
 const app = express();
