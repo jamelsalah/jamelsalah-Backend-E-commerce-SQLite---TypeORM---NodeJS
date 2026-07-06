@@ -294,7 +294,6 @@ router.patch(
  *   get:
  *     summary: Lista produtos paginados (filtro opcional por categoria)
  *     tags: [Products]
- *     security: [{ bearerAuth: [] }]
  *     parameters:
  *       - in: query
  *         name: page
@@ -305,7 +304,7 @@ router.patch(
  *       - in: query
  *         name: category
  *         schema: { type: string }
- *         description: Nome da categoria (case-insensitive). Inclui sub-categorias.
+ *         description: Categoria por id (só dígitos) OU nome (case-insensitive). Inclui sub-categorias.
  *     responses:
  *       200:
  *         description: Lista paginada
@@ -319,13 +318,10 @@ router.patch(
  *                   items: { $ref: '#/components/schemas/Product' }
  *                 meta: { $ref: '#/components/schemas/PaginationMeta' }
  *       400: { description: Parâmetros inválidos (page/limit) }
- *       401: { description: Não autenticado }
  *       404: { description: Categoria não encontrada (quando filtro é passado) }
  */
 router.get(
     "/products",
-    authMiddleware,
-    allowRoles(UserRole.ADMIN, UserRole.SELLER, UserRole.CUSTOMER),
     ProductController.list
 );
 /**

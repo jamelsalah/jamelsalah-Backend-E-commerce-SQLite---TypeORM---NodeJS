@@ -8,19 +8,32 @@ import { HttpError } from "../utils/HttpError";
 function ProductService() {
     const repo = AppDataSource.getRepository(Product)
 
-    async function list(skip: number, take: number, categoryName?: string) {
+    // Acha a categoria pelo id (quando o texto é só dígitos) ou pelo nome (case-insensitive).
+    async function findCategoryByIdOrName(idOrName: string) {
+        const categoryRepo = AppDataSource.getRepository(Category);
+
+        const isNumericId = /^\d+$/.test(idOrName);
+
+        if (isNumericId) {
+            return categoryRepo.findOne({ where: { id: Number(idOrName) } });
+        }
+
+        return categoryRepo
+            .createQueryBuilder("category")
+            .where("LOWER(category.name) = LOWER(:name)", { name: idOrName })
+            .getOne();
+    }
+
+    async function list(skip: number, take: number, category?: string) {
 
         const qb = repo.createQueryBuilder("product");
 
-        if (categoryName) {
-            const category = await AppDataSource.getRepository(Category)
-                .createQueryBuilder("category")
-                .where("LOWER(category.name) = LOWER(:name)", { name: categoryName })
-                .getOne();
+        if (category) {
+            const foundCategory = await findCategoryByIdOrName(category);
 
-            if (!category) throw HttpError.notFound("Categoria não encontrada");
+            if (!foundCategory) throw HttpError.notFound("Categoria não encontrada");
 
-            qb.where("product.category_id = :id OR product.sub_category_id = :id", { id: category.id });
+            qb.where("product.category_id = :id OR product.sub_category_id = :id", { id: foundCategory.id });
         }
 
         const [data, total] = await qb
