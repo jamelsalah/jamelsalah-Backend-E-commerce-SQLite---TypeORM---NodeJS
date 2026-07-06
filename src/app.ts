@@ -38,6 +38,22 @@ const webhookLimiter = rateLimit({
 
 const app = express();
 
+// Trust proxy: em produção o backend roda atrás de um proxy reverso (nginx, load balancer,
+// PaaS) que repassa o IP real do cliente no header X-Forwarded-For. Sem isto, req.ip seria o
+// IP do proxy e os rate limiters por IP tratariam todos os clientes como um só.
+// Configurável por env para NÃO confiar cegamente (confiar em todos permite forjar o header).
+// Ex.: TRUST_PROXY=1 confia no 1º proxy à frente; ou uma lista tipo "loopback, 10.0.0.0/8".
+// Em dev (sem proxy) deixe a variável vazia: o padrão do Express (false) usa o IP do socket.
+const trustProxySetting = process.env.TRUST_PROXY;
+if (trustProxySetting) {
+    const hopCount = Number(trustProxySetting);
+    if (Number.isInteger(hopCount)) {
+        app.set("trust proxy", hopCount);
+    } else {
+        app.set("trust proxy", trustProxySetting);
+    }
+}
+
 app.use(helmet());
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS!
