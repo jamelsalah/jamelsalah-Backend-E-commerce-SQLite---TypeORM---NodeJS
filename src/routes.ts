@@ -364,7 +364,6 @@ router.post(
  *   get:
  *     summary: Detalhe do produto com todas as imagens e o campo details
  *     tags: [Products]
- *     security: [{ bearerAuth: [] }]
  *     parameters:
  *       - in: path
  *         name: id
@@ -377,13 +376,10 @@ router.post(
  *           application/json:
  *             schema: { $ref: '#/components/schemas/ProductDetail' }
  *       400: { description: ID inválido }
- *       401: { description: Não autenticado }
  *       404: { description: Produto não encontrado }
  */
 router.get(
     "/products/:id",
-    authMiddleware,
-    allowRoles(UserRole.ADMIN, UserRole.SELLER, UserRole.CUSTOMER),
     ProductController.getById
 );
 /**
