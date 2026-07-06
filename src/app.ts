@@ -35,6 +35,14 @@ const webhookLimiter = rateLimit({
     message: { error: "Rate limit excedido." },
 });
 
+// Rotas públicas de catálogo (GET /products e GET /products/:id). Limite generoso:
+// como a página é SSR, as leituras chegam pelo IP do servidor Next (um só).
+const catalogLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    limit: 120,
+    message: { error: "Muitas requisições. Tente novamente em instantes." },
+});
+
 const app = express();
 
 app.use(helmet());
@@ -79,6 +87,7 @@ app.use("/auth", authLimiter);
 app.use("/register", registerLimiter);
 app.use("/checkout", checkoutLimiter);
 app.use("/webhook", webhookLimiter);
+app.use("/products", catalogLimiter);
 app.use("/", router);
 
 app.use(errorHandler);
