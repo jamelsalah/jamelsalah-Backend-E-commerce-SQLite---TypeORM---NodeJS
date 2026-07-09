@@ -36,6 +36,12 @@ const webhookLimiter = rateLimit({
     message: { error: "Rate limit excedido." },
 });
 
+const uploadLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 30,
+    message: { error: "Muitos uploads. Tente novamente em 15 minutos." },
+});
+
 const app = express();
 
 // Trust proxy: em produção o backend roda atrás de um proxy reverso (nginx, load balancer,
@@ -96,6 +102,7 @@ app.use("/auth", authLimiter);
 app.use("/register", registerLimiter);
 app.use("/checkout", checkoutLimiter);
 app.use("/webhook", webhookLimiter);
+app.use("/uploads", uploadLimiter);
 app.use("/products", catalogLimiter);
 app.use("/", router);
 

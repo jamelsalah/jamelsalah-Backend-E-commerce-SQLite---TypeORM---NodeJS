@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import multer from "multer";
 import { HttpError } from "../utils/HttpError";
 
 type ExposableError = {
@@ -21,6 +22,14 @@ export function errorHandler(
             body.details = err.details;
         }
         return res.status(err.status).json(body);
+    }
+
+    // Erros do multer (upload): tamanho excedido vira 413, o resto vira 400.
+    if (err instanceof multer.MulterError) {
+        if (err.code === "LIMIT_FILE_SIZE") {
+            return res.status(413).json({ error: "Arquivo excede o limite de 8MB." });
+        }
+        return res.status(400).json({ error: "Falha no upload do arquivo." });
     }
 
     // Erros do Express/body-parser/etc. com `expose: true` indicam

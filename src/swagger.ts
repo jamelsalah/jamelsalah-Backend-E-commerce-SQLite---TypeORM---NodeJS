@@ -201,6 +201,23 @@ const manualSchemas = {
             amount: { type: "integer", description: "Total da cobrança em centavos" },
         },
     },
+    UploadResponse: {
+        type: "object",
+        properties: {
+            files: {
+                type: "array",
+                items: {
+                    type: "object",
+                    properties: {
+                        url: { type: "string", description: "URL pública da imagem no Cloudinary (CDN)" },
+                        public_id: { type: "string", description: "Identificador da imagem no Cloudinary" },
+                        width: { type: "integer" },
+                        height: { type: "integer" },
+                    },
+                },
+            },
+        },
+    },
 };
 
 const isDev = process.env.NODE_ENV !== "production";

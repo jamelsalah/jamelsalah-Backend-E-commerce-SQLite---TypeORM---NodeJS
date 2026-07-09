@@ -8,6 +8,7 @@ import AddressController from "./controllers/AddressController";
 import PaymentController from "./controllers/PaymentController";
 import OrderController from "./controllers/OrderController";
 import EventsController from "./controllers/EventsController";
+import UploadController from "./controllers/UploadController";
 
 import { validateDTO } from "./middlewares/validateDTO";
 import { CreateUserDTO } from "./dtos/CreateUserDTO";
@@ -22,6 +23,7 @@ import { UpdateOrderStatusDTO } from "./dtos/OrderDTO";
 
 import { authMiddleware } from "./middlewares/auth";
 import { catalogLimiter } from "./middlewares/rateLimiters";
+import { uploadImages } from "./middlewares/uploadMiddleware";
 
 import { allowRoles } from "./middlewares/roleMiddleware";
 import { UserRole } from "./types/UserRole";
@@ -472,6 +474,46 @@ router.patch(
     allowRoles(UserRole.ADMIN),
     validateDTO(UpdateRelevanceDTO),
     ProductController.updateRelevance
+);
+
+
+/**
+ * @openapi
+ * /uploads:
+ *   post:
+ *     summary: Faz upload de imagens e retorna as URLs hospedadas (Cloudinary)
+ *     tags: [Uploads]
+ *     security: [{ bearerAuth: [] }]
+ *     description: Recebe de 1 a 15 imagens (campo `files`) e devolve as URLs na mesma ordem enviada. Apenas ADMIN.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               files:
+ *                 type: array
+ *                 items: { type: string, format: binary }
+ *             required: [files]
+ *     responses:
+ *       201:
+ *         description: Imagens hospedadas
+ *         content:
+ *           application/json:
+ *             schema: { $ref: '#/components/schemas/UploadResponse' }
+ *       400: { description: Arquivo ausente ou formato inválido }
+ *       401: { description: Não autenticado }
+ *       403: { description: Sem permissão (apenas ADMIN) }
+ *       413: { description: Arquivo excede o limite de 8MB }
+ *       503: { description: Upload não configurado no servidor }
+ */
+router.post(
+    "/uploads",
+    authMiddleware,
+    allowRoles(UserRole.ADMIN),
+    uploadImages,
+    UploadController.upload
 );
 
 
