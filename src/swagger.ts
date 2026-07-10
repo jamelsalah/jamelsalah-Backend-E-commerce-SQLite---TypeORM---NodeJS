@@ -59,7 +59,7 @@ const manualSchemas = {
             id: { type: "integer" },
             name: { type: "string" },
             email: { type: "string" },
-            role: { type: "string", enum: ["CUSTOMER", "SELLER", "ADMIN"] },
+            role: { type: "string", enum: ["customer", "seller", "admin"] },
         },
     },
     AuthResponse: {
