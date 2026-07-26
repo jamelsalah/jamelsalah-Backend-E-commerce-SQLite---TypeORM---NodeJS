@@ -142,9 +142,8 @@ router.post(
  * @openapi
  * /categories:
  *   get:
- *     summary: Lista categorias ativas
+ *     summary: Lista categorias ativas (pública, com rate limit)
  *     tags: [Categories]
- *     security: [{ bearerAuth: [] }]
  *     responses:
  *       200:
  *         description: OK
@@ -153,16 +152,12 @@ router.post(
  *             schema:
  *               type: array
  *               items: { $ref: '#/components/schemas/Category' }
- *       401:
- *         description: Não autenticado
- *         content:
- *           application/json:
- *             schema: { $ref: '#/components/schemas/ErrorResponse' }
+ *       429:
+ *         description: Muitas requisições (rate limit)
  */
 router.get(
     "/categories",
-    authMiddleware,
-    allowRoles(UserRole.ADMIN, UserRole.SELLER, UserRole.CUSTOMER),
+    catalogLimiter,
     CategoryController.list
 );
 /**
