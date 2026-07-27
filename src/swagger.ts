@@ -79,6 +79,7 @@ const manualSchemas = {
     },
     Product: {
         type: "object",
+        required: ["id", "name", "price", "category_id", "img_url", "relevance"],
         properties: {
             id: { type: "integer" },
             name: { type: "string" },
