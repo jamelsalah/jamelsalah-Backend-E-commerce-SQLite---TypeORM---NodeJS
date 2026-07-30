@@ -290,7 +290,7 @@ router.patch(
  * @openapi
  * /products:
  *   get:
- *     summary: Lista produtos paginados (filtros opcionais: categoria e busca por texto)
+ *     summary: Lista produtos paginados (filtros opcionais de categoria e busca por texto)
  *     tags: [Products]
  *     parameters:
  *       - in: query
