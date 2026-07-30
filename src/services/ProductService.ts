@@ -24,7 +24,7 @@ function ProductService() {
             .getOne();
     }
 
-    async function list(skip: number, take: number, category?: string) {
+    async function list(skip: number, take: number, category?: string, search?: string) {
 
         const qb = repo.createQueryBuilder("product");
 
@@ -33,7 +33,16 @@ function ProductService() {
 
             if (!foundCategory) throw HttpError.notFound("Categoria não encontrada");
 
-            qb.where("product.category_id = :id OR product.sub_category_id = :id", { id: foundCategory.id });
+            // Parênteses no OR para o filtro não "vazar" quando combinado com a busca.
+            qb.andWhere("(product.category_id = :id OR product.sub_category_id = :id)", { id: foundCategory.id });
+        }
+
+        // Busca por texto: traz o produto se a palavra estiver no nome OU na descrição.
+        if (search) {
+            qb.andWhere(
+                "(LOWER(product.name) LIKE LOWER(:term) OR LOWER(product.desc) LIKE LOWER(:term))",
+                { term: `%${search}%` },
+            );
         }
 
         const [data, total] = await qb

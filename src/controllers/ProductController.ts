@@ -14,6 +14,17 @@ function getCategoryParam(req: Request): string | undefined {
     return undefined;
 }
 
+// Lê o "?search=" da URL (busca por texto) e tira espaços das pontas.
+function getSearchParam(req: Request): string | undefined {
+    const value = req.query.search;
+
+    if (typeof value === "string" && value.trim().length > 0) {
+        return value.trim();
+    }
+
+    return undefined;
+}
+
 function ProductController() {
 
     const home = asyncHandler(async (_req: Request, res: Response) => {
@@ -24,8 +35,9 @@ function ProductController() {
     const list = asyncHandler(async (req: Request, res: Response) => {
         const { page, limit, skip, take } = parsePagination(req);
         const category = getCategoryParam(req);
+        const search = getSearchParam(req);
 
-        const { data, total } = await Service.list(skip, take, category);
+        const { data, total } = await Service.list(skip, take, category, search);
 
         return res.status(200).json({
             data,

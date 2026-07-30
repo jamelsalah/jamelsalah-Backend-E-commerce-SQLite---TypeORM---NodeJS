@@ -290,7 +290,7 @@ router.patch(
  * @openapi
  * /products:
  *   get:
- *     summary: Lista produtos paginados (filtro opcional por categoria)
+ *     summary: Lista produtos paginados (filtros opcionais: categoria e busca por texto)
  *     tags: [Products]
  *     parameters:
  *       - in: query
@@ -303,6 +303,10 @@ router.patch(
  *         name: category
  *         schema: { type: string }
  *         description: Categoria por id (só dígitos) OU nome (case-insensitive). Inclui sub-categorias.
+ *       - in: query
+ *         name: search
+ *         schema: { type: string }
+ *         description: Busca por texto no nome OU na descrição do produto (case-insensitive).
  *     responses:
  *       200:
  *         description: Lista paginada
